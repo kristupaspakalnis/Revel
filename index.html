@@ -1,0 +1,208 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<title>Establishment Menu Preview</title>
+</head>
+
+<body>
+	<span>for MAC RUN from terminal to use with chrome</span></br>
+	<span>open -a Google\ Chrome --args --disable-web-security --user-data-dir</span></br>
+	<span>For PC add --disable-web-security --user-data-dir as start parameters</span><br><p>
+	<div class="menu">
+		<div class="menuspan" id="nav">
+		<div class="cartbutton" onclick="opencart()">
+			Cart
+		</div>
+		</div>
+
+		<div id="menu" class="products">
+		</div>
+
+		<div class="menuspan">
+			<div class="checkprice" onclick="checkprice()">
+				Check Price
+			</div>
+			<div class="subtotal">
+			Sub Total: 
+			</div><div class="subtotaldigits" id="subtotal">$0.00</div>
+			<div class="total" id="total">
+				Total: $0.00
+			</div>
+		</div>
+	</div></p>
+	<div class="cart hide" id="cart">
+		<div class="topcart">
+			<div class="cartclosebutton" onclick="closecart()">CLOSE</div>
+		</div>
+		<div id="cartdata">
+		</div>
+	</div>
+
+
+	<script>
+	var apikey = "f05cda1b3a8f47c1b821110b636b7d88";
+	var apisecret = "6c96c092894a4711a114643473675016235c5d4b85d043259f2336b3fc476169";
+	
+	var cat = new Array();
+  	var cart = new Array();
+  	var menu = document.getElementById("menu");
+	var nav = document.getElementById("nav");
+	var subtotal = document.getElementById("subtotal");
+	var total = document.getElementById("total");
+	var cartbox = document.getElementById("cart");
+	var cartdata = document.getElementById("cartdata");
+	var sub = 0;
+
+	$.ajax({
+		url: "https://qa2.revelup.com/weborders/menu/?establishment=1731",
+		type: 'GET',
+		dataType: "json",
+		headers:{
+			'API-AUTHENTICATION': apikey+":"+apisecret,
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+			},
+		data: {
+		},
+			success: function(data){
+        tmpcat = data.data.categories;
+        for(cats in tmpcat){
+          var category = document.createElement("div");
+          var text = document.createTextNode(tmpcat[cats].name);
+          category.setAttribute('onclick', 'loadcat('+tmpcat[cats].id+')');
+          category.setAttribute('class', 'category');
+          category.appendChild(text);
+          nav.appendChild(category);
+        }
+    }
+	});
+
+  	function loadcat(catid){
+  		while (menu.firstChild) {
+    		menu.removeChild(menu.firstChild);
+  		}
+	$.ajax({
+		url: "https://qa2.revelup.com/weborders/menu/?establishment=1731",
+		type: 'GET',
+		dataType: "json",
+		headers:{
+			'API-AUTHENTICATION': apikey+":"+apisecret,
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+			},
+		data: {
+		},
+			success: function(data){
+        tmpcat = data.data.categories;
+        cat = tmpcat.find(obj =>obj.id == catid);
+        for(products in cat.products){
+          var product = document.createElement("div");
+          var text = document.createTextNode(cat.products[products].name + " $" + cat.products[products].price);
+          product.setAttribute('product', cat.products[products].id);
+          product.setAttribute('class', 'product');
+          product.setAttribute('price', cat.products[products].price);
+          product.setAttribute('onclick', 'addtocart('+cat.products[products].id+', '+cat.products[products].price+', "'+cat.products[products].name+'")');
+          product.appendChild(text);
+          menu.appendChild(product);
+        }	
+    }
+	});
+}
+
+	function addtocart(id, price, name){
+		if(!(cart.find(obj =>obj.product == id))){
+			tmpar = {
+				"product": id,
+				"price": price,
+				"name": name,
+				"quantity": 1
+			};
+			cart.push(tmpar);
+		}else{
+			item = cart.find(obj =>obj.product == id);
+			item.quantity++;
+		}
+		
+		sub+= price;
+		subtotal.innerHTML = "$" + (Math.round(sub * 100) / 100).toFixed(2);
+
+  	}
+
+
+function checkprice(){
+
+	datapack = {
+      "establishmentId":1731,
+      "items": cart,
+      "orderInfo":{
+      "dining_option": 0
+      }
+	}
+	jsondata = JSON.stringify(datapack);
+	$.ajax({
+		url: "https://qa2.revelup.com/specialresources/cart/calculate/",
+		type: 'POST',
+		dataType: "json",
+		headers:{
+			'API-AUTHENTICATION': apikey+":"+apisecret,
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+		},
+		data: jsondata,
+		success: function(data){
+		total.innerHTML = "Total: $" + (Math.round(data.data.final_total * 100) / 100).toFixed(2); 	
+		}  
+	});
+
+}
+
+function opencart(){
+	cartbox.setAttribute('class', 'cart show');
+	while (cartdata.firstChild) {
+    		cartdata.removeChild(cartdata.firstChild);
+  	}
+	for(id in cart){
+		var item = document.createElement("div");
+		var span = document.createElement("span");
+		var text = document.createTextNode(cart[id].name + ": " + cart[id].quantity);
+		item.setAttribute('class', 'cartitem');
+		item.setAttribute('id', 'item'+cart[id].product);
+		span.setAttribute('id', cart[id].product);
+
+		span.appendChild(text);
+        item.appendChild(span);
+        var rembutton = document.createElement("div");
+        var text = document.createTextNode("Remove");
+        rembutton.appendChild(text);
+        rembutton.setAttribute('class', 'removebutton');
+        rembutton.setAttribute('onclick', 'removeitem('+cart[id].product+')');
+        item.appendChild(rembutton);
+
+        cartdata.appendChild(item);
+	}
+}
+function closecart(){
+	cartbox.setAttribute('class', 'cart hide');
+}
+
+function removeitem(id){
+	 remitem = cart.find(obj =>obj.product == id);
+	 if(remitem.quantity > 1){
+	 	remitem.quantity--;
+	 	sub-=remitem.price;
+	 	subtotal.innerHTML = "$" + (Math.round(sub * 100) / 100).toFixed(2);
+	 	var item = document.getElementById(id);
+	 	item.innerHTML = remitem.name + ": " + remitem.quantity;
+	 }
+	 else{
+	 	cart.splice(cart.indexOf(remitem), 1);
+	 	var item = document.getElementById('item'+id);
+	 	cartdata.removeChild(item);
+	 	sub-=remitem.price;
+	 	subtotal.innerHTML = "$" + (Math.round(sub * 100) / 100).toFixed(2);
+	 }
+}
+</script>
+</body>
+</html>

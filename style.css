@@ -1,0 +1,207 @@
+body
+{
+    margin: 0px;
+	background-color:white;
+	
+}
+.menuspan{
+	position:relative;
+	width:100%;
+	height:52px;
+	background-color:blue;
+	left:50%;
+	transform: translate(-50%, 0);
+}
+.menu{
+	position: relative;
+	height: auto;
+	min-height: 500px;
+	width: 80%;
+	left:50%;
+	transform: translate(-50%, 0);
+}
+.products{
+	width: 100%;
+	min-height: 300px;
+}
+.cartbutton{
+	position: relative;
+	width: 100px;
+	line-height: 50px;
+	text-align: center;
+	height: 50px;
+	font-size: 20px;
+	float:right;
+  	margin-left:5px;
+	border: 1px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: white;
+}
+.cartbutton:hover{
+	background-color: green;
+}
+.cart{
+	height: 500px;
+	width: 500px;
+	position: fixed;
+	z-index: 100;
+	float: left;
+	border-radius: 5px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: black;
+	background-color: white;
+	display: block;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+}
+.show{
+	display: block;
+}
+.hide{
+	display: none;
+}
+.topcart{
+	width: 100%;
+	position: relative;
+	height: 30px;
+}
+.cartclosebutton{
+	position: relative;
+	float: right;
+	box-sizing: border-box;
+	border-style: solid;
+	border-color: black;
+	border-width: 1px;
+	border-radius: 5px;
+	height: 30px;
+	width: 80px;
+	line-height: 30px;
+	font-size: 20px;
+	cursor: pointer;
+	text-align: center;
+}
+.cartclosebutton:hover{
+	color:red;
+}
+.cartitem{
+	width: 100%;
+	height: 30px;
+	border-style: solid;
+	margin-top: 2px;
+	line-height: 30px;
+	border-width : 1px;
+	padding-left: 5px;
+	border-left-style: none;
+	border-right-style: none;
+	border-color: black;
+	box-sizing: border-box;
+	position: relative;
+	float: left;
+}
+.removebutton{
+	position: relative;
+	float: right;
+	height: 30px;
+	line-height: 30px;
+	font-size: 20px;
+	margin-right: 5px;
+	cursor: pointer;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
+}
+.removebutton:hover{
+	color: red;
+}
+.product{
+	position: relative;
+	min-width: 400px;
+	width: auto;
+	margin-top:5px;
+	height: 30px;
+	border: 1px;
+	cursor: pointer;
+	border-style: solid;
+	border-color: black;
+}
+.product:hover{
+	background-color: rgba(0,200,0,0.5);
+}
+.checkprice{
+	position: relative;
+	margin-left: 5px;
+	width: 150px;
+	line-height: 50px;
+	text-align: center;
+	height: 50px;
+	font-size: 20px;
+	border: 1px;
+	border-style: solid;
+	border-color: black;
+	float:left;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: white;
+}
+.checkprice:hover{
+	background-color: rgba(0,200,0,0.5);
+}
+.category{
+	position: relative;
+	width: 150px;
+	line-height: 50px;
+	text-align: center;
+	height: 50px;
+	font-size: 20px;
+	float:left;
+  	margin-left:5px;
+	border: 1px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: white;
+}
+.category:hover{
+	background-color: green;
+}
+.subtotal{
+	position: relative;
+	float:left;
+	margin-left: 5px;
+	height: 52px;
+	width: 80px;
+	line-height: 52px;
+	text-align: center;
+	text-align: left;
+	font-size: 15px;
+	color: white;
+}
+.subtotaldigits{
+	position: relative;
+	height: 52px;
+	margin-left: 2px;
+	text-align: center;
+	font-size: 15px;
+	color: white;
+	line-height: 52px;
+	width: 40px;
+	float:left;
+}
+.total{
+	position: relative;
+	float:right;
+	margin-left: 5px;
+	height: 52px;
+	width: 150px;
+	line-height: 52px;
+	text-align: center;
+	text-align: left;
+	font-size: 20px;
+	color: white;
+}
